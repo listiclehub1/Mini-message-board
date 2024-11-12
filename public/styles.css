@@ -1,0 +1,30 @@
+li {
+  display: flex;  
+  margin: 1em;
+  align-items: center;
+  gap: 1em;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+button {
+  width: auto;
+  height: 2em;
+}
+
+a:link, a:visited {
+  background-color: gainsboro;
+  color: black;
+  padding: 0.5em 0.5em;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border: 1px solid black;
+}
+
+a:hover, a:active {
+  background-color: lightgray;
+}
