@@ -1,16 +1,17 @@
-const messages = [
-  {
-    id: 0,
-    text: "Hi there!",
-    user: "Amando",
-    added: new Date()
-  },
-  {
-    id: 1,
-    text: "Hello World!",
-    user: "Charles",
-    added: new Date()
-  }
-];
+const pool = require("./pool");
 
-module.exports = messages;
+async function getAllMessages() {
+  const { rows } = await pool.query("SELECT * FROM messages");
+  return rows;
+};
+
+async function addMessage(text, username) {
+  await pool.query("INSERT INTO messages (text, username, added) VALUES ($1, $2, $3)", [text, username, new Date()]);
+};
+
+async function getMessage(id) {
+  const { rows } = await pool.query("SELECT * FROM messages WHERE id=$1", [id]);
+  return rows;
+}
+
+module.exports = {getAllMessages, addMessage, getMessage};

@@ -1,22 +1,25 @@
 const express = require("express");
 const router = express.Router();
-const messages = require("../db");
+const db = require("../db");
 
-router.get("/", (req, res) => res.render("index", { title: "Mini Messageboard", messages: messages }));
+router.get("/", async (req, res) => res.render("index", { title: "Mini Messageboard", messages: await db.getAllMessages() }));
 
 router.get("/new", (req, res) => res.render("form"));
 
-router.post("/new", (req, res) => {
-  messages.push({ id: messages.length, text: req.body.message , user: req.body.user, added: new Date() });
+router.post("/new", async(req, res) => {
+  await db.addMessage(req.body.message ,req.body.user);
   res.redirect("/");
 });
 
-router.get("/messages/:messageid", (req, res) => {
+router.get("/messages/:messageid", async (req, res) => {
   const id = parseInt(req.params.messageid);
-  if (id < messages.length)
-    res.render("message", {message: messages[id]});
-  else 
-    res.send("No message found");
+  let messages = await db.getMessage(id);
+  if (messages.length === 0) {
+    // res.send("<div>No message found</div><a href='/'>Go Back</a>");
+    res.render("nomessage");
+    return;
+  }
+  res.render("message", {message: messages[0]});
 });
 
 module.exports = router;
